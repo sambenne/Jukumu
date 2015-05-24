@@ -1,0 +1,13 @@
+{
+    "name": "sbennett/jukumu",
+    "description": "Laravel 5 Roles and Permissions Extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sam Bennett",
+            "email": "bennettsst@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
