@@ -10,8 +10,6 @@
     return [
         // Default Users Table
         'users' => 'users',
-        // Location of Models
-        'models' => 'models',
         // Roles Table Name
         'roles_table' => 'roles',
         // Permissions Table Name
