@@ -20,6 +20,7 @@
         {
             Schema::table(Config::get('jukumu.users'), function($table)
             {
+                $table->dropForeign(['role_id']);
                 $table->dropColumn('role_id');
             });
         }
