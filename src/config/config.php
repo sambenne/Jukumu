@@ -8,6 +8,7 @@
      */
 
     return [
+        'users' => 'users',
         'roles_table' => 'roles',
         'permissions_table' => 'permissions',
         'role_permissions_table' => 'role_permissions'
