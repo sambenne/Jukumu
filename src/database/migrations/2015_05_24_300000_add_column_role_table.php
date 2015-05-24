@@ -9,7 +9,7 @@
         {
             Schema::table(Config::get('jukumu.users'), function($table)
             {
-                $table->integer('role_id')->unsigned();
+                $table->integer('role_id')->unsigned()->after('email');
                 $table->foreign('role_id')->references('id')->on(Config::get('jukumu.roles_table'))
                     ->onUpdate('cascade')->onDelete('cascade');
             });
