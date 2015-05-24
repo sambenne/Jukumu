@@ -18,7 +18,7 @@
          */
         public function up()
         {
-            Schema::create(Config::get('jukumu.role_permissions'), function(Blueprint $table)
+            Schema::create(Config::get('jukumu.role_permissions_table'), function(Blueprint $table)
             {
                 $table->increments('id');
                 $table->integer('role_id');
@@ -34,7 +34,7 @@
          */
         public function down()
         {
-            Schema::drop(Config::get('jukumu.role_permissions'));
+            Schema::drop(Config::get('jukumu.role_permissions_table'));
         }
 
     }
