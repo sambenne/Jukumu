@@ -8,8 +8,14 @@
      */
 
     return [
+        // Default Users Table
         'users' => 'users',
+        // Location of Models
+        'models' => 'models',
+        // Roles Table Name
         'roles_table' => 'roles',
+        // Permissions Table Name
         'permissions_table' => 'permissions',
+        // Role Permissions Table Name
         'role_permissions_table' => 'role_permissions'
     ];
