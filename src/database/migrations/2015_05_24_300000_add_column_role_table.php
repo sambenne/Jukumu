@@ -3,7 +3,7 @@
     use Illuminate\Database\Migrations\Migration;
     use Illuminate\Database\Schema\Blueprint;
 
-    class addColumnFestivalTable extends Migration {
+    class AddColumnRoleTable extends Migration {
 
         public function up()
         {
