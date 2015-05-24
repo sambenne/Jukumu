@@ -22,7 +22,11 @@
         public function register()
         {
             $this->publishes([
-                realpath(__DIR__.'/../migrations') => $this->app->databasePath().'/migrations',
-            ]);
+                __DIR__.'/../config/config.php' => config_path('jukumu.php')
+            ], 'config');
+
+            $this->publishes([
+                __DIR__.'/../database/migrations/' => database_path('/migrations')
+            ], 'migrations');
         }
     }
