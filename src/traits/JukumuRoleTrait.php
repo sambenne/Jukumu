@@ -73,7 +73,7 @@
          */
         public function hasRole( array $roles = [] )
         {
-            $roles = Role::whereIn('name', $roles)->list('id');
+            $roles = Role::whereIn('name', $roles)->lists('id');
 
             return in_array($this->role_id, $roles);
         }
@@ -84,9 +84,12 @@
          * This can be used to check if a user has a set of permissions.
          *
          * @param array $permissions
+         *
+         * @return bool
          */
         public function has( array $permissions = [] )
         {
-            echo "<pre>" . print_r($this->role->permissions(), true) . "</pre>\n";
+            $count = $this->role->permissions()->whereIn('name', $permissions)->count();
+            return ($count > 0);
         }
     }
