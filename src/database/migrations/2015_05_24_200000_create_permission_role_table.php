@@ -9,7 +9,7 @@
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Database\Migrations\Migration;
 
-    class CreateRolePermissionsTable extends Migration {
+    class CreatePermissionRoleTable extends Migration {
 
         /**
          * Run the migrations.
