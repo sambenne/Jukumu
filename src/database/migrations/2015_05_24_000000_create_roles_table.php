@@ -22,8 +22,9 @@
             {
                 $table->increments('id');
                 $table->string('name');
-                $table->string('clean');
-                $table->string('description');
+                $table->int('order')->default(0);
+                $table->string('display_name')->nullable()->default(NULL);
+                $table->string('description')->nullable()->default(NULL);
                 $table->timestamps();
             });
         }
