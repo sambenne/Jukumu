@@ -6,7 +6,7 @@
      * @license MIT
      * @package sbenentt\jukumu
      */
-    namespace SamBenne\Jukumu\Jukumu;
+    namespace SamBenne\Jukumu;
 
     use SamBenne\Jukumu\Models\Permission;
     use SamBenne\Jukumu\Models\Role;
