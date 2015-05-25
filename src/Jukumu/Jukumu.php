@@ -81,7 +81,7 @@
 
         /**
          * Attach Permissions
-         * 
+         *
          * @param User  $user
          * @param array $permissions
          */
