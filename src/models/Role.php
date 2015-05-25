@@ -9,6 +9,7 @@
     namespace SamBenne\Jukumu\Models;
 
     use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Support\Facades\Config;
 
     /**
      * Class Role
@@ -19,6 +20,8 @@
      * @property int         $order
      * @property string|null $display_name
      * @property string|null $description
+     *
+     * @property-read Permission $permissions
      */
     class Role extends Model
     {

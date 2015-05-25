@@ -17,6 +17,8 @@
      * @package SamBenne\Jukumu\Traits
      *
      * @property int $role_id
+     *
+     * @property-read Role $role
      */
     trait JukumuRoleTrait
     {
@@ -25,7 +27,7 @@
          */
         public function role()
         {
-            return $this->hasOne(Role::class);
+            return $this->belongsTo(Role::class);
         }
 
         /**
@@ -37,7 +39,8 @@
          */
         public function setRole( $role )
         {
-
+            $this->role_id = $role;
+            $this->save();
         }
 
         /**
@@ -46,10 +49,33 @@
          * This is used to check if a user has a particular role.
          *
          * @param string $role
+         *
+         * @return bool
          */
         public function is( $role )
         {
+            /**
+             * @var Role $role
+             */
+            $role = Role::where('name', $role)->first();
 
+            return $role->id === $this->role_id;
+        }
+
+        /**
+         * Has Role
+         *
+         * This allows for multiple role name checks.
+         *
+         * @param array $roles
+         *
+         * @return bool
+         */
+        public function hasRole( array $roles = [] )
+        {
+            $roles = Role::whereIn('name', $roles)->list('id');
+
+            return in_array($this->role_id, $roles);
         }
 
         /**
@@ -61,6 +87,6 @@
          */
         public function has( array $permissions = [] )
         {
-
+            echo "<pre>" . print_r($this->role->permissions(), true) . "</pre>\n";
         }
     }

@@ -68,13 +68,13 @@
         /**
          * Attach Role and Permissions
          *
-         * @param User  $user
+         * @param mixed  $user
          * @param Role  $role
          * @param array $permissions
          */
-        public static function attachRole( User $user, Role $role, array $permissions = [] )
+        public static function attachRole( $user, Role $role, array $permissions = [] )
         {
-            $user->setRole($role);
+            $user->setRole($role->id);
 
             self::attachPermissions( $user, $permissions );
         }
@@ -82,15 +82,15 @@
         /**
          * Attach Permissions
          *
-         * @param User  $user
+         * @param mixed  $user
          * @param array $permissions
          */
-        public static function attachPermissions( User $user, array $permissions = [] )
+        public static function attachPermissions( $user, array $permissions = [] )
         {
             if( !empty($permissions) ) {
                 for( $i = 0, $c = count($permissions); $i < $c; $i++ ) {
-                    $permission = Permission::find(['name' => $permissions[$i]])->pluck('id');
-                    $user->role()->attach($permission->id);
+                    $permission = Permission::where(['name' => $permissions[$i]])->first();
+                    $user->role->permissions()->attach($permission->id);
                 }
             }
         }
