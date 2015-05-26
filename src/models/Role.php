@@ -1,13 +1,13 @@
 <?php
 
-/*
-* This file is part of Jukumu.
-*
-* (c) Sam Bennett <bennettsst@gmail.com>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+    /*
+    * This file is part of Jukumu.
+    *
+    * (c) Sam Bennett <bennettsst@gmail.com>
+    *
+    * For the full copyright and license information, please view the LICENSE
+    * file that was distributed with this source code.
+    */
 
     namespace SamBenne\Jukumu\Models;
 
@@ -18,11 +18,11 @@
      * Class Role
      * @package SamBenne\Jukumu\Models
      *
-     * @property int         $id
-     * @property string      $name
-     * @property int         $order
-     * @property string|null $display_name
-     * @property string|null $description
+     * @property int             $id
+     * @property string          $name
+     * @property int             $order
+     * @property string|null     $display_name
+     * @property string|null     $description
      *
      * @property-read Permission $permissions
      */
@@ -55,6 +55,6 @@
          */
         public function permissions()
         {
-            return $this->belongsToMany(Permission::class)->withTimestamps();
+            return $this->belongsToMany( Permission::class )->withTimestamps();
         }
     }
