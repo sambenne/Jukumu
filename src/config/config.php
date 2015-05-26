@@ -16,5 +16,5 @@
         // Permissions Table Name
         'permissions_table'      => 'permissions',
         // Role Permissions Table Name
-        'role_permissions_table' => 'permission_role'
+        'role_permissions_table' => 'permission_roles'
     ];
