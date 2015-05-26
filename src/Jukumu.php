@@ -32,14 +32,7 @@
          */
         public static function createRole( $name, $display_name = NULL, $description = NULL, $order = 0 )
         {
-            $role = new Role();
-
-            $role->name         = $name;
-            $role->display_name = $display_name;
-            $role->description  = $description;
-            $role->order        = $order;
-
-            $role->save();
+            $role = Role::create(compact('name', 'display_name', 'description', 'order'));
 
             return $role;
         }
@@ -56,14 +49,7 @@
          */
         public static function createPermission( $name, $group = NULL, $display_name = NULL, $description = NULL )
         {
-            $permission = new Permission();
-
-            $permission->name         = $name;
-            $permission->group        = $group;
-            $permission->display_name = $display_name;
-            $permission->description  = $description;
-
-            $permission->save();
+            $permission = Permission::create(compact('name', 'group', 'display_name', 'description'));
 
             return $permission;
         }
