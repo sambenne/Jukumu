@@ -3,8 +3,6 @@ Jukumu
 
 This package adds extra functionality to the built in User Authentication. This adds the ability to do User Roles and Permissions.
 
-![Jukumu](jukumu.png)
-
 ## Features
  - Ability to add a role to a user and add permissions to that role.
  
