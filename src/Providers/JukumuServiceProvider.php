@@ -36,9 +36,10 @@
          */
         public function register()
         {
-            $this->publishes( [
-                __DIR__ . '/../config/config.php' => config_path( 'jukumu.php' )
-            ], 'config' );
+            $source = realpath(__DIR__.'/../config/jukumu.php');
+
+            $this->publishes([$source => config_path('jukumu.php')]);
+            $this->mergeConfigFrom($source, 'jukumu');
 
             $this->publishes( [
                 __DIR__ . '/../database/migrations/' => database_path( '/migrations' )
