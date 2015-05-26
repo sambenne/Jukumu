@@ -73,11 +73,11 @@
          *
          * @return bool
          */
-        public function hasRole( array $roles = [ ] )
+        public function hasRole( array $roles )
         {
-            $roles = Role::whereIn( 'name', $roles )->lists( 'id' );
+            $roles = Role::whereIn( 'name', (array) $roles )->lists( 'id' );
 
-            return in_array( $this->role_id, $roles );
+            return in_array( $this->role_id, (array) $roles );
         }
 
         /**
@@ -89,19 +89,19 @@
          *
          * @return bool
          */
-        public function has( array $permissions = [ ] )
+        public function has( $permissions )
         {
             $query = $this->role->permissions();
 
-            for ($i = 0, $c = count( $permissions ); $i < $c; $i ++) {
-                $permission = explode( '.', $permissions[$i], 2 );
+            for ($i = 0, $c = count( (array) $permissions ); $i < $c; $i ++) {
+                $permission = explode( '.', (array) $permissions[$i], 2 );
                 if (count( $permission ) === 2) {
                     $query->orWhere( function ( $query ) use ( $permission ) {
                         $query->where( 'name', $permission[1] )
                               ->where( 'group', $permission[0] );
                     } );
                 } else {
-                    $query->orWhere( 'name', $permissions[$i] );
+                    $query->orWhere( 'name', (array) $permissions[$i] );
                 }
             }
 
