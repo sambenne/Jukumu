@@ -1,4 +1,6 @@
 <?php
+
+
     /*
     * This file is part of Jukumu.
     *
@@ -57,5 +59,5 @@
         | Default: 'permission_role'
         |
         */
-        'role_permissions_table' => 'permission_role'
+        'role_permissions_table' => 'permission_role',
     ];
