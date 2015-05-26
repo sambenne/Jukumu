@@ -4,7 +4,7 @@ This package adds extra functionality to the built in User Authentication. This 
 
 ## Features
 
-    - Ability to add a role to a user and add permissions to that role.
+- Ability to add a role to a user and add permissions to that role.
 
 ## Installing
 
@@ -51,19 +51,19 @@ Once this is in you can use these new methods are automatically made available, 
 
 There are also a helper class `Jukumu` that will help with creating the roles and permissions.
 
-    - `Jukumu::createRole( $name, $display_name = NULL, $description = NULL, $order = 0 )`
-    - `Jukumu::createPermission( $name, $group = NULL, $display_name = NULL, $description = NULL )`
-    - `Jukumu::attachRole( $user, Role $role, array $permissions = [] )`
-    - `Jukumu::attachPermissions( Role $role, array $permissions = [] )`
+- `Jukumu::createRole( $name, $display_name = NULL, $description = NULL, $order = 0 )`
+- `Jukumu::createPermission( $name, $group = NULL, $display_name = NULL, $description = NULL )`
+- `Jukumu::attachRole( $user, Role $role, array $permissions = [] )`
+- `Jukumu::attachPermissions( Role $role, array $permissions = [] )`
 
 ### Create Role
 
 This will create a role. This only requires a name however, there are extra information that you can add.
 
-    - **Name**: Required, String
-    - **Display Name**: Optional, String
-    - **Description**: Optional, String
-    - **Order**: Optional, Integer
+- **Name**: Required, String
+- **Display Name**: Optional, String
+- **Description**: Optional, String
+- **Order**: Optional, Integer
 
 **Example**
 
@@ -76,10 +76,10 @@ Jukumu::createRole('user', 'User', 'This is the basic user role.', 1);
 
 This will create a permission that you can attach to a role later.
 
-    - **Name**: Required, String
-    - **Group**: Optional, String
-    - **Display Name**: Optional, String
-    - **Description**: Optional, String
+- **Name**: Required, String
+- **Group**: Optional, String
+- **Display Name**: Optional, String
+- **Description**: Optional, String
 
 The group parameter allows you to group the permissions together, this then allows for dot notation on permission checking later.
 
