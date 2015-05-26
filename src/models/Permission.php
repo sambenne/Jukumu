@@ -32,6 +32,11 @@
          */
         protected $table;
 
+        /**
+         * The attributes that are mass assignable.
+         *
+         * @var string[]
+         */
         protected $fillable = [ 'name', 'group', 'display_name', 'description' ];
 
         /**
