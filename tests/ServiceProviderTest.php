@@ -1,11 +1,12 @@
 <?php
-    /**
-     * This file is part of Jukumu,
-     * A Role and Permission management solution for Laravel.
-     *
-     * @license MIT
-     * @package sbenentt\jukumu
-     */
+    /*
+    * This file is part of Jukumu.
+    *
+    * (c) Sam Bennett <bennettsst@gmail.com>
+    *
+    * For the full copyright and license information, please view the LICENSE
+    * file that was distributed with this source code.
+    */
     namespace SamBenne\Tests\Jukumu;
 
     use GrahamCampbell\TestBench\Traits\ServiceProviderTestCaseTrait;

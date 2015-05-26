@@ -1,11 +1,14 @@
 <?php
-    /**
-     * This file is part of Jukumu,
-     * A Role and Permission management solution for Laravel.
-     *
-     * @license MIT
-     * @package sbenentt\jukumu
-     */
+
+/*
+* This file is part of Jukumu.
+*
+* (c) Sam Bennett <bennettsst@gmail.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
     namespace SamBenne\Jukumu;
 
     use SamBenne\Jukumu\Models\Permission;
@@ -44,7 +47,7 @@
         /**
          * Create Permission
          *
-         * @param string     $name
+         * @param string      $name
          * @param string|null $group
          * @param string|null $display_name
          * @param string|null $description
@@ -55,10 +58,10 @@
         {
             $permission = new Permission();
 
-            $permission->name = $name;
-            $permission->group = $group;
+            $permission->name         = $name;
+            $permission->group        = $group;
             $permission->display_name = $display_name;
-            $permission->description = $description;
+            $permission->description  = $description;
 
             $permission->save();
 
@@ -68,30 +71,48 @@
         /**
          * Attach Role and Permissions
          *
-         * @param mixed  $user
+         * @param mixed $user
          * @param Role  $role
          * @param array $permissions
          */
-        public static function attachRole( $user, Role $role, array $permissions = [] )
+        public static function attachRole( $user, Role $role, array $permissions = [ ] )
         {
-            $user->setRole($role->id);
+            $user->setRole( $role->id );
 
-            self::attachPermissions( $user, $permissions );
+            self::attachPermissions( $role, $permissions );
         }
 
         /**
          * Attach Permissions
          *
-         * @param mixed  $user
+         * @param Role  $role
          * @param array $permissions
          */
-        public static function attachPermissions( $user, array $permissions = [] )
+        public static function attachPermissions( Role $role, array $permissions = [ ] )
         {
-            if( !empty($permissions) ) {
-                for( $i = 0, $c = count($permissions); $i < $c; $i++ ) {
-                    $permission = Permission::where(['name' => $permissions[$i]])->first();
-                    $user->role->permissions()->attach($permission->id);
+            if ( ! empty( $permissions )) {
+                for ($i = 0, $c = count( $permissions ); $i < $c; $i ++) {
+                    $permissionData = self::getPermission( $permissions[$i] );
+                    $permission     = Permission::where( 'name', $permissionData->permission );
+
+                    if ($permissionData->group !== '') {
+                        $permission->where( 'group', $permissionData->group );
+                    }
+
+                    $permission = $permission->first();
+
+                    $role->permissions()->attach( $permission->id );
                 }
             }
+        }
+
+        public static function getPermission( $permission )
+        {
+            $permission = explode( '.', $permission, 2 );
+
+            return (object) [
+                'permission' => ( isset( $permission[1] ) ? $permission[1] : $permission[0] ),
+                'group'      => ( isset( $permission[1] ) ? $permission[0] : '' )
+            ];
         }
     }

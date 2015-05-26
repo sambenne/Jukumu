@@ -1,11 +1,13 @@
 <?php
-    /**
-     * This file is part of Jukumu,
-     * A Role and Permission management solution for Laravel.
-     *
-     * @license MIT
-     * @package sbenentt\jukumu
-     */
+
+/*
+* This file is part of Jukumu.
+*
+* (c) Sam Bennett <bennettsst@gmail.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
     namespace SamBenne\Jukumu\Traits;
 
@@ -59,7 +61,7 @@
              */
             $role = Role::where('name', $role)->first();
 
-            return $role->id === $this->role_id;
+            return !is_null($role) && $role->id === $this->role_id;
         }
 
         /**
@@ -89,7 +91,20 @@
          */
         public function has( array $permissions = [] )
         {
-            $count = $this->role->permissions()->whereIn('name', $permissions)->count();
-            return ($count > 0);
+            $query = $this->role->permissions();
+
+            for( $i = 0, $c = count($permissions); $i < $c; $i++ ) {
+                $permission = explode('.', $permissions[$i], 2);
+                if( count($permission) === 2 ) {
+                    $query->orWhere(function( $query ) use ($permission) {
+                        $query->where('name', $permission[1])
+                              ->where('group', $permission[0]);
+                    });
+                } else {
+                    $query->orWhere('name', $permissions[$i]);
+                }
+            }
+
+            return ($query->count() > 0);
         }
     }
