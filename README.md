@@ -119,4 +119,4 @@ If an error has occurred please check and add an issue with the error in the iss
 
 ## License
 
-Laravel Auto Presenter is licensed under [The MIT License (MIT)](LICENSE).
+Jukumu is licensed under [The MIT License (MIT)](LICENSE).
