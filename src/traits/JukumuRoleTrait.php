@@ -13,10 +13,8 @@ namespace SamBenne\Jukumu\Traits;
 
 use SamBenne\Jukumu\Models\Role;
 
-
 /**
- * Class JukumuRoleTrait
- * @package SamBenne\Jukumu\Traits
+ * Class JukumuRoleTrait.
  *
  * @property int       $role_id
  *
@@ -29,24 +27,24 @@ trait JukumuRoleTrait
      */
     public function role()
     {
-        return $this->belongsTo( Role::class );
+        return $this->belongsTo(Role::class);
     }
 
     /**
-     * Set Role
+     * Set Role.
      *
      * Nice way to set the role of a user.
      *
      * @param string|int $role
      */
-    public function setRole( $role )
+    public function setRole($role)
     {
         $this->role_id = $role;
         $this->save();
     }
 
     /**
-     * Is Role
+     * Is Role.
      *
      * This is used to check if a user has a particular role.
      *
@@ -54,19 +52,19 @@ trait JukumuRoleTrait
      *
      * @return bool
      */
-    public function is( $role )
+    public function is($role)
     {
-        /**
-         * @var Role $role
+        /*
+         * @var Role
          */
-        $role = Role::where( 'name', $role )
+        $role = Role::where('name', $role)
                     ->first();
 
-        return ! is_null( $role ) && $role->id === $this->role_id;
+        return !is_null($role) && $role->id === $this->role_id;
     }
 
     /**
-     * Has Role
+     * Has Role.
      *
      * This allows for multiple role name checks.
      *
@@ -74,16 +72,16 @@ trait JukumuRoleTrait
      *
      * @return bool
      */
-    public function hasRole( array $roles )
+    public function hasRole(array $roles)
     {
-        $roles = Role::whereIn( 'name', (array) $roles )
-                     ->lists( 'id' );
+        $roles = Role::whereIn('name', (array) $roles)
+                     ->lists('id');
 
-        return in_array( $this->role_id, (array) $roles );
+        return in_array($this->role_id, (array) $roles);
     }
 
     /**
-     * Has Permission(s)
+     * Has Permission(s).
      *
      * This can be used to check if a user has a set of permissions.
      *
@@ -91,22 +89,22 @@ trait JukumuRoleTrait
      *
      * @return bool
      */
-    public function has( $permissions )
+    public function has($permissions)
     {
         $query = $this->role->permissions();
 
-        for ($i = 0, $c = count( (array) $permissions ); $i < $c; $i ++) {
-            $permission = explode( '.', (array) $permissions[$i], 2 );
-            if (count( $permission ) === 2) {
-                $query->orWhere( function ( $query ) use ( $permission ) {
-                    $query->where( 'name', $permission[1] )
-                          ->where( 'group', $permission[0] );
-                } );
+        for ($i = 0, $c = count((array) $permissions); $i < $c; $i++) {
+            $permission = explode('.', (array) $permissions[$i], 2);
+            if (count($permission) === 2) {
+                $query->orWhere(function ($query) use ($permission) {
+                    $query->where('name', $permission[1])
+                          ->where('group', $permission[0]);
+                });
             } else {
-                $query->orWhere( 'name', (array) $permissions[$i] );
+                $query->orWhere('name', (array) $permissions[$i]);
             }
         }
 
-        return ( $query->count() > 0 );
+        return ($query->count() > 0);
     }
 }

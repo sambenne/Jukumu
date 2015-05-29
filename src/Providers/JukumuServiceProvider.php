@@ -8,17 +8,16 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
+
 namespace SamBenne\Jukumu\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class JukumuServiceProvider
- * @package SamBenne\Jukumu\Providers
+ * Class JukumuServiceProvider.
  */
 class JukumuServiceProvider extends ServiceProvider
 {
-
     /**
      * Boot the service provider.
      *
@@ -36,13 +35,13 @@ class JukumuServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $source = realpath( __DIR__ . '/../config/jukumu.php' );
+        $source = realpath(__DIR__.'/../config/jukumu.php');
 
-        $this->publishes( [ $source => config_path( 'jukumu.php' ) ] );
-        $this->mergeConfigFrom( $source, 'jukumu' );
+        $this->publishes([$source => config_path('jukumu.php')]);
+        $this->mergeConfigFrom($source, 'jukumu');
 
-        $this->publishes( [
-            __DIR__ . '/../database/migrations/' => database_path( '/migrations' )
-        ], 'migrations' );
+        $this->publishes([
+            __DIR__.'/../database/migrations/' => database_path('/migrations'),
+        ], 'migrations');
     }
 }

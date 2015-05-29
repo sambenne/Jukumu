@@ -15,8 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
 /**
- * Class Role
- * @package SamBenne\Jukumu\Models
+ * Class Role.
  *
  * @property int             $id
  * @property string          $name
@@ -40,27 +39,27 @@ class Role extends Model
      *
      * @var string[]
      */
-    protected $fillable = [ 'name', 'order', 'display_name', 'description' ];
+    protected $fillable = ['name', 'order', 'display_name', 'description'];
 
     /**
      * Creates a new instance of the model.
      *
      * @param array $attributes
      */
-    public function __construct( array $attributes = [ ] )
+    public function __construct(array $attributes = [])
     {
-        parent::__construct( $attributes );
-        $this->table = Config::get( 'jukumu.roles_table' );
+        parent::__construct($attributes);
+        $this->table = Config::get('jukumu.roles_table');
     }
 
     /**
-     * Get All Permissions
+     * Get All Permissions.
      *
      * @return Permission
      */
     public function permissions()
     {
-        return $this->belongsToMany( Permission::class )
+        return $this->belongsToMany(Permission::class)
                     ->withTimestamps();
     }
 }

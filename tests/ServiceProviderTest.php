@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of Jukumu.
 *
@@ -7,6 +8,7 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
+
 namespace SamBenne\Tests\Jukumu;
 
 use GrahamCampbell\TestBench\Traits\ServiceProviderTestCaseTrait;
@@ -22,6 +24,6 @@ class ServiceProviderTest extends AbstractTestCase
 
     public function testJukumuIsInjectable()
     {
-        $this->assertIsInjectable( 'SamBenne\Jukumu\Jukumu' );
+        $this->assertIsInjectable('SamBenne\Jukumu\Jukumu');
     }
 }

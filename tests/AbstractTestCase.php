@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of Jukumu.
 *
@@ -7,6 +8,7 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
+
 namespace SamBenne\Tests\Jukumu;
 
 use GrahamCampbell\TestBench\AbstractPackageTestCase;
@@ -25,9 +27,9 @@ abstract class AbstractTestCase extends AbstractPackageTestCase
      *
      * @return string[]
      */
-    protected function getRequiredServiceProviders( $app )
+    protected function getRequiredServiceProviders($app)
     {
-        return [ ];
+        return [];
     }
 
     /**
@@ -37,7 +39,7 @@ abstract class AbstractTestCase extends AbstractPackageTestCase
      *
      * @return string
      */
-    protected function getServiceProviderClass( $app )
+    protected function getServiceProviderClass($app)
     {
         return 'SamBenne\Jukumu\Providers\JukumuServiceProvider';
     }

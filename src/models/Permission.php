@@ -8,14 +8,14 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
+
 namespace SamBenne\Jukumu\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
 /**
- * Class Permission
- * @package SamBenne\Jukumu\Models
+ * Class Permission.
  *
  * @property int         $id
  * @property string      $name
@@ -37,16 +37,16 @@ class Permission extends Model
      *
      * @var string[]
      */
-    protected $fillable = [ 'name', 'group', 'display_name', 'description' ];
+    protected $fillable = ['name', 'group', 'display_name', 'description'];
 
     /**
      * Creates a new instance of the model.
      *
      * @param array $attributes
      */
-    public function __construct( array $attributes = [ ] )
+    public function __construct(array $attributes = [])
     {
-        parent::__construct( $attributes );
-        $this->table = Config::get( 'jukumu.permissions_table' );
+        parent::__construct($attributes);
+        $this->table = Config::get('jukumu.permissions_table');
     }
 }

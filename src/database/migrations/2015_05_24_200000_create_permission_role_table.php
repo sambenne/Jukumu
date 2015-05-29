@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of Jukumu.
 *
@@ -7,14 +8,13 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 
 class CreatePermissionRoleTable extends Migration
 {
-
     /**
      * Run the migrations.
      *
@@ -22,12 +22,12 @@ class CreatePermissionRoleTable extends Migration
      */
     public function up()
     {
-        Schema::create( Config::get( 'jukumu.role_permissions_table' ), function ( Blueprint $table ) {
-            $table->increments( 'id' );
-            $table->integer( 'role_id' );
-            $table->integer( 'permission_id' );
+        Schema::create(Config::get('jukumu.role_permissions_table'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('role_id');
+            $table->integer('permission_id');
             $table->timestamps();
-        } );
+        });
     }
 
     /**
@@ -37,7 +37,6 @@ class CreatePermissionRoleTable extends Migration
      */
     public function down()
     {
-        Schema::drop( Config::get( 'jukumu.role_permissions_table' ) );
+        Schema::drop(Config::get('jukumu.role_permissions_table'));
     }
-
 }

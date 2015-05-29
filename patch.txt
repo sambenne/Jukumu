@@ -1,0 +1,733 @@
+diff --git a/src/Jukumu.php b/src/Jukumu.php
+index 58b03fb8f95bc77a40cbdddf52512bd2b35f3d9b..69177c7b4e38a3253a020786585887473f6ce159 100644
+--- a/src/Jukumu.php
++++ b/src/Jukumu.php
+@@ -15,13 +15,12 @@ use SamBenne\Jukumu\Models\Permission;
+ use SamBenne\Jukumu\Models\Role;
+ 
+ /**
+- * Class Jukumu
+- * @package SamBenne\Jukumu\Jukumu
++ * Class Jukumu.
+  */
+ class Jukumu
+ {
+     /**
+-     * Create Role
++     * Create Role.
+      *
+      * @param string      $name
+      * @param string|null $display_name
+@@ -30,15 +29,15 @@ class Jukumu
+      *
+      * @return Role
+      */
+-    public static function createRole( $name, $display_name = NULL, $description = NULL, $order = 0 )
++    public static function createRole($name, $display_name = null, $description = null, $order = 0)
+     {
+-        $role = Role::create( compact( 'name', 'display_name', 'description', 'order' ) );
++        $role = Role::create(compact('name', 'display_name', 'description', 'order'));
+ 
+         return $role;
+     }
+ 
+     /**
+-     * Create Permission
++     * Create Permission.
+      *
+      * @param string      $name
+      * @param string|null $group
+@@ -47,59 +46,59 @@ class Jukumu
+      *
+      * @return Permission
+      */
+-    public static function createPermission( $name, $group = NULL, $display_name = NULL, $description = NULL )
++    public static function createPermission($name, $group = null, $display_name = null, $description = null)
+     {
+-        $permission = Permission::create( compact( 'name', 'group', 'display_name', 'description' ) );
++        $permission = Permission::create(compact('name', 'group', 'display_name', 'description'));
+ 
+         return $permission;
+     }
+ 
+     /**
+-     * Attach Role and Permissions
++     * Attach Role and Permissions.
+      *
+      * @param mixed $user
+      * @param Role  $role
+      * @param array $permissions
+      */
+-    public static function attachRole( $user, Role $role, array $permissions = [ ] )
++    public static function attachRole($user, Role $role, array $permissions = [])
+     {
+-        $user->setRole( $role->id );
++        $user->setRole($role->id);
+ 
+-        self::attachPermissions( $role, $permissions );
++        self::attachPermissions($role, $permissions);
+     }
+ 
+     /**
+-     * Attach Permissions
++     * Attach Permissions.
+      *
+      * @param Role  $role
+      * @param array $permissions
+      */
+-    public static function attachPermissions( Role $role, array $permissions = [ ] )
++    public static function attachPermissions(Role $role, array $permissions = [])
+     {
+-        if ( ! empty( $permissions )) {
+-            for ($i = 0, $c = count( $permissions ); $i < $c; $i ++) {
+-                $permissionData = self::getPermission( $permissions[$i] );
+-                $permission     = Permission::where( 'name', $permissionData->permission );
++        if (!empty($permissions)) {
++            for ($i = 0, $c = count($permissions); $i < $c; $i++) {
++                $permissionData = self::getPermission($permissions[$i]);
++                $permission = Permission::where('name', $permissionData->permission);
+ 
+                 if ($permissionData->group !== '') {
+-                    $permission->where( 'group', $permissionData->group );
++                    $permission->where('group', $permissionData->group);
+                 }
+ 
+                 $permission = $permission->first();
+ 
+                 $role->permissions()
+-                     ->attach( $permission->id );
++                     ->attach($permission->id);
+             }
+         }
+     }
+ 
+-    public static function getPermission( $permission )
++    public static function getPermission($permission)
+     {
+-        $permission = explode( '.', $permission, 2 );
++        $permission = explode('.', $permission, 2);
+ 
+         return (object) [
+-            'permission' => ( isset( $permission[1] ) ? $permission[1] : $permission[0] ),
+-            'group'      => ( isset( $permission[1] ) ? $permission[0] : '' )
++            'permission' => (isset($permission[1]) ? $permission[1] : $permission[0]),
++            'group'      => (isset($permission[1]) ? $permission[0] : ''),
+         ];
+     }
+ }
+diff --git a/src/Providers/JukumuServiceProvider.php b/src/Providers/JukumuServiceProvider.php
+index 0bfb2d155b5344e3bff9e7a739c47df7e0427af5..1b8a23d4987c52b2d7213381e5c77c4577f69eb1 100644
+--- a/src/Providers/JukumuServiceProvider.php
++++ b/src/Providers/JukumuServiceProvider.php
+@@ -8,17 +8,16 @@
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
++
+ namespace SamBenne\Jukumu\Providers;
+ 
+ use Illuminate\Support\ServiceProvider;
+ 
+ /**
+- * Class JukumuServiceProvider
+- * @package SamBenne\Jukumu\Providers
++ * Class JukumuServiceProvider.
+  */
+ class JukumuServiceProvider extends ServiceProvider
+ {
+-
+     /**
+      * Boot the service provider.
+      *
+@@ -36,13 +35,13 @@ class JukumuServiceProvider extends ServiceProvider
+      */
+     public function register()
+     {
+-        $source = realpath( __DIR__ . '/../config/jukumu.php' );
++        $source = realpath(__DIR__.'/../config/jukumu.php');
+ 
+-        $this->publishes( [ $source => config_path( 'jukumu.php' ) ] );
+-        $this->mergeConfigFrom( $source, 'jukumu' );
++        $this->publishes([$source => config_path('jukumu.php')]);
++        $this->mergeConfigFrom($source, 'jukumu');
+ 
+-        $this->publishes( [
+-            __DIR__ . '/../database/migrations/' => database_path( '/migrations' )
+-        ], 'migrations' );
++        $this->publishes([
++            __DIR__.'/../database/migrations/' => database_path('/migrations'),
++        ], 'migrations');
+     }
+ }
+diff --git a/src/config/jukumu.php b/src/config/jukumu.php
+index e8dfdb8ff8e259a304a6dbc0addd313d9100a1ef..f1225e27894d963680425df803ef1ba94f8874d3 100644
+--- a/src/config/jukumu.php
++++ b/src/config/jukumu.php
+@@ -1,4 +1,5 @@
+ <?php
++
+ /*
+ * This file is part of Jukumu.
+ *
+@@ -54,5 +55,5 @@ return [
+     | Default: 'permission_role'
+     |
+     */
+-    'role_permissions_table' => 'permission_role'
++    'role_permissions_table' => 'permission_role',
+ ];
+diff --git a/src/database/migrations/2015_05_24_000000_create_roles_table.php b/src/database/migrations/2015_05_24_000000_create_roles_table.php
+index edff02cff4749866c967f21e6accb79eafd72ee7..cfe86c9f64b1c8495c4f7fe90bf9a1f8c3e292f2 100644
+--- a/src/database/migrations/2015_05_24_000000_create_roles_table.php
++++ b/src/database/migrations/2015_05_24_000000_create_roles_table.php
+@@ -9,14 +9,13 @@
+ * file that was distributed with this source code.
+ */
+ 
+-use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\Config;
+ use Illuminate\Support\Facades\Schema;
+ 
+ class CreateRolesTable extends Migration
+ {
+-
+     /**
+      * Run the migrations.
+      *
+@@ -24,19 +23,19 @@ class CreateRolesTable extends Migration
+      */
+     public function up()
+     {
+-        Schema::create( Config::get( 'jukumu.roles_table' ), function ( Blueprint $table ) {
+-            $table->increments( 'id' );
+-            $table->string( 'name' );
+-            $table->integer( 'order' )
+-                  ->default( 0 );
+-            $table->string( 'display_name' )
++        Schema::create(Config::get('jukumu.roles_table'), function (Blueprint $table) {
++            $table->increments('id');
++            $table->string('name');
++            $table->integer('order')
++                  ->default(0);
++            $table->string('display_name')
+                   ->nullable()
+-                  ->default( NULL );
+-            $table->string( 'description' )
++                  ->default(null);
++            $table->string('description')
+                   ->nullable()
+-                  ->default( NULL );
++                  ->default(null);
+             $table->timestamps();
+-        } );
++        });
+     }
+ 
+     /**
+@@ -46,7 +45,6 @@ class CreateRolesTable extends Migration
+      */
+     public function down()
+     {
+-        Schema::drop( Config::get( 'jukumu.roles_table' ) );
++        Schema::drop(Config::get('jukumu.roles_table'));
+     }
+-
+ }
+diff --git a/src/database/migrations/2015_05_24_100000_create_permissions_table.php b/src/database/migrations/2015_05_24_100000_create_permissions_table.php
+index e8027d6d9f940946e6a5e2b3ae3f1aa53fe95cad..9a54a6d0dc1cb732fdcf85ef34ac0f1ba706e431 100644
+--- a/src/database/migrations/2015_05_24_100000_create_permissions_table.php
++++ b/src/database/migrations/2015_05_24_100000_create_permissions_table.php
+@@ -1,4 +1,5 @@
+ <?php
++
+ /*
+ * This file is part of Jukumu.
+ *
+@@ -7,14 +8,13 @@
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+-use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\Config;
+ use Illuminate\Support\Facades\Schema;
+ 
+ class CreatePermissionsTable extends Migration
+ {
+-
+     /**
+      * Run the migrations.
+      *
+@@ -22,20 +22,20 @@ class CreatePermissionsTable extends Migration
+      */
+     public function up()
+     {
+-        Schema::create( Config::get( 'jukumu.permissions_table' ), function ( Blueprint $table ) {
+-            $table->increments( 'id' );
+-            $table->string( 'name' );
+-            $table->string( 'group' )
++        Schema::create(Config::get('jukumu.permissions_table'), function (Blueprint $table) {
++            $table->increments('id');
++            $table->string('name');
++            $table->string('group')
+                   ->nullable()
+-                  ->default( NULL );
+-            $table->string( 'display_name' )
++                  ->default(null);
++            $table->string('display_name')
+                   ->nullable()
+-                  ->default( NULL );
+-            $table->string( 'description' )
++                  ->default(null);
++            $table->string('description')
+                   ->nullable()
+-                  ->default( NULL );
++                  ->default(null);
+             $table->timestamps();
+-        } );
++        });
+     }
+ 
+     /**
+@@ -45,7 +45,6 @@ class CreatePermissionsTable extends Migration
+      */
+     public function down()
+     {
+-        Schema::drop( Config::get( 'jukumu.permissions_table' ) );
++        Schema::drop(Config::get('jukumu.permissions_table'));
+     }
+-
+ }
+diff --git a/src/database/migrations/2015_05_24_200000_create_permission_role_table.php b/src/database/migrations/2015_05_24_200000_create_permission_role_table.php
+index f2ba996f248a27f99fa2a267a8cac3beb34a53a7..60c6e2b19029eff14f4ab89c540fdadc28723fd3 100644
+--- a/src/database/migrations/2015_05_24_200000_create_permission_role_table.php
++++ b/src/database/migrations/2015_05_24_200000_create_permission_role_table.php
+@@ -1,4 +1,5 @@
+ <?php
++
+ /*
+ * This file is part of Jukumu.
+ *
+@@ -7,14 +8,13 @@
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+-use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\Config;
+ use Illuminate\Support\Facades\Schema;
+ 
+ class CreatePermissionRoleTable extends Migration
+ {
+-
+     /**
+      * Run the migrations.
+      *
+@@ -22,12 +22,12 @@ class CreatePermissionRoleTable extends Migration
+      */
+     public function up()
+     {
+-        Schema::create( Config::get( 'jukumu.role_permissions_table' ), function ( Blueprint $table ) {
+-            $table->increments( 'id' );
+-            $table->integer( 'role_id' );
+-            $table->integer( 'permission_id' );
++        Schema::create(Config::get('jukumu.role_permissions_table'), function (Blueprint $table) {
++            $table->increments('id');
++            $table->integer('role_id');
++            $table->integer('permission_id');
+             $table->timestamps();
+-        } );
++        });
+     }
+ 
+     /**
+@@ -37,7 +37,6 @@ class CreatePermissionRoleTable extends Migration
+      */
+     public function down()
+     {
+-        Schema::drop( Config::get( 'jukumu.role_permissions_table' ) );
++        Schema::drop(Config::get('jukumu.role_permissions_table'));
+     }
+-
+ }
+diff --git a/src/database/migrations/2015_05_24_300000_add_column_role_table.php b/src/database/migrations/2015_05_24_300000_add_column_role_table.php
+index 6cfdedebeb18ba05a19862ef684a14991bcd1f88..02be1da8c6bd3e104179648875193c227dcc65fb 100644
+--- a/src/database/migrations/2015_05_24_300000_add_column_role_table.php
++++ b/src/database/migrations/2015_05_24_300000_add_column_role_table.php
+@@ -1,4 +1,5 @@
+ <?php
++
+ /*
+ * This file is part of Jukumu.
+ *
+@@ -8,37 +9,34 @@
+ * file that was distributed with this source code.
+ */
+ 
+-use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
+ use Illuminate\Support\Facades\Config;
+ use Illuminate\Support\Facades\Schema;
+ 
+ class AddColumnRoleTable extends Migration
+ {
+-
+     public function up()
+     {
+-        Schema::table( Config::get( 'jukumu.users' ), function ( Blueprint $table ) {
+-            $table->integer( 'role_id' )
++        Schema::table(Config::get('jukumu.users'), function (Blueprint $table) {
++            $table->integer('role_id')
+                   ->unsigned()
+                   ->nullable()
+-                  ->default( NULL )
+-                  ->after( 'email' );
+-            $table->foreign( 'role_id' )
+-                  ->references( 'id' )
+-                  ->on( Config::get( 'jukumu.roles_table' ) )
+-                  ->onUpdate( 'cascade' )
+-                  ->onDelete( 'cascade' );
+-        } );
+-
++                  ->default(null)
++                  ->after('email');
++            $table->foreign('role_id')
++                  ->references('id')
++                  ->on(Config::get('jukumu.roles_table'))
++                  ->onUpdate('cascade')
++                  ->onDelete('cascade');
++        });
+     }
+ 
+     public function down()
+     {
+-        Schema::table( Config::get( 'jukumu.users' ), function ( Blueprint $table ) {
+-            $table->dropForeign( [ 'role_id' ] );
+-            $table->dropColumn( 'role_id' );
+-        } );
++        Schema::table(Config::get('jukumu.users'), function (Blueprint $table) {
++            $table->dropForeign(['role_id']);
++            $table->dropColumn('role_id');
++        });
+     }
+-
+ }
+diff --git a/src/models/Permission.php b/src/models/Permission.php
+index 7bb40b4cbb8d1e9325671666bdc8e99e9fb49de2..7fceb22a6a5a2fb554a83f74ccfe771f64b53d45 100644
+--- a/src/models/Permission.php
++++ b/src/models/Permission.php
+@@ -8,14 +8,14 @@
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
++
+ namespace SamBenne\Jukumu\Models;
+ 
+ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Support\Facades\Config;
+ 
+ /**
+- * Class Permission
+- * @package SamBenne\Jukumu\Models
++ * Class Permission.
+  *
+  * @property int         $id
+  * @property string      $name
+@@ -37,16 +37,16 @@ class Permission extends Model
+      *
+      * @var string[]
+      */
+-    protected $fillable = [ 'name', 'group', 'display_name', 'description' ];
++    protected $fillable = ['name', 'group', 'display_name', 'description'];
+ 
+     /**
+      * Creates a new instance of the model.
+      *
+      * @param array $attributes
+      */
+-    public function __construct( array $attributes = [ ] )
++    public function __construct(array $attributes = [])
+     {
+-        parent::__construct( $attributes );
+-        $this->table = Config::get( 'jukumu.permissions_table' );
++        parent::__construct($attributes);
++        $this->table = Config::get('jukumu.permissions_table');
+     }
+ }
+diff --git a/src/models/Role.php b/src/models/Role.php
+index ec3993d11028a896ddea4e4e9dfe44a552ecb2bf..e8ad928858751bef2fdd81bb1bc51de7a472312d 100644
+--- a/src/models/Role.php
++++ b/src/models/Role.php
+@@ -15,8 +15,7 @@ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Support\Facades\Config;
+ 
+ /**
+- * Class Role
+- * @package SamBenne\Jukumu\Models
++ * Class Role.
+  *
+  * @property int             $id
+  * @property string          $name
+@@ -40,27 +39,27 @@ class Role extends Model
+      *
+      * @var string[]
+      */
+-    protected $fillable = [ 'name', 'order', 'display_name', 'description' ];
++    protected $fillable = ['name', 'order', 'display_name', 'description'];
+ 
+     /**
+      * Creates a new instance of the model.
+      *
+      * @param array $attributes
+      */
+-    public function __construct( array $attributes = [ ] )
++    public function __construct(array $attributes = [])
+     {
+-        parent::__construct( $attributes );
+-        $this->table = Config::get( 'jukumu.roles_table' );
++        parent::__construct($attributes);
++        $this->table = Config::get('jukumu.roles_table');
+     }
+ 
+     /**
+-     * Get All Permissions
++     * Get All Permissions.
+      *
+      * @return Permission
+      */
+     public function permissions()
+     {
+-        return $this->belongsToMany( Permission::class )
++        return $this->belongsToMany(Permission::class)
+                     ->withTimestamps();
+     }
+ }
+diff --git a/src/traits/JukumuRoleTrait.php b/src/traits/JukumuRoleTrait.php
+index 1d1ace10ab385d61211762472f5748c6da1aa498..b0c546a3c5ddf3d08344221a63863301d3583390 100644
+--- a/src/traits/JukumuRoleTrait.php
++++ b/src/traits/JukumuRoleTrait.php
+@@ -13,10 +13,8 @@ namespace SamBenne\Jukumu\Traits;
+ 
+ use SamBenne\Jukumu\Models\Role;
+ 
+-
+ /**
+- * Class JukumuRoleTrait
+- * @package SamBenne\Jukumu\Traits
++ * Class JukumuRoleTrait.
+  *
+  * @property int       $role_id
+  *
+@@ -29,24 +27,24 @@ trait JukumuRoleTrait
+      */
+     public function role()
+     {
+-        return $this->belongsTo( Role::class );
++        return $this->belongsTo(Role::class);
+     }
+ 
+     /**
+-     * Set Role
++     * Set Role.
+      *
+      * Nice way to set the role of a user.
+      *
+      * @param string|int $role
+      */
+-    public function setRole( $role )
++    public function setRole($role)
+     {
+         $this->role_id = $role;
+         $this->save();
+     }
+ 
+     /**
+-     * Is Role
++     * Is Role.
+      *
+      * This is used to check if a user has a particular role.
+      *
+@@ -54,19 +52,19 @@ trait JukumuRoleTrait
+      *
+      * @return bool
+      */
+-    public function is( $role )
++    public function is($role)
+     {
+-        /**
+-         * @var Role $role
++        /*
++         * @var Role
+          */
+-        $role = Role::where( 'name', $role )
++        $role = Role::where('name', $role)
+                     ->first();
+ 
+-        return ! is_null( $role ) && $role->id === $this->role_id;
++        return !is_null($role) && $role->id === $this->role_id;
+     }
+ 
+     /**
+-     * Has Role
++     * Has Role.
+      *
+      * This allows for multiple role name checks.
+      *
+@@ -74,16 +72,16 @@ trait JukumuRoleTrait
+      *
+      * @return bool
+      */
+-    public function hasRole( array $roles )
++    public function hasRole(array $roles)
+     {
+-        $roles = Role::whereIn( 'name', (array) $roles )
+-                     ->lists( 'id' );
++        $roles = Role::whereIn('name', (array) $roles)
++                     ->lists('id');
+ 
+-        return in_array( $this->role_id, (array) $roles );
++        return in_array($this->role_id, (array) $roles);
+     }
+ 
+     /**
+-     * Has Permission(s)
++     * Has Permission(s).
+      *
+      * This can be used to check if a user has a set of permissions.
+      *
+@@ -91,22 +89,22 @@ trait JukumuRoleTrait
+      *
+      * @return bool
+      */
+-    public function has( $permissions )
++    public function has($permissions)
+     {
+         $query = $this->role->permissions();
+ 
+-        for ($i = 0, $c = count( (array) $permissions ); $i < $c; $i ++) {
+-            $permission = explode( '.', (array) $permissions[$i], 2 );
+-            if (count( $permission ) === 2) {
+-                $query->orWhere( function ( $query ) use ( $permission ) {
+-                    $query->where( 'name', $permission[1] )
+-                          ->where( 'group', $permission[0] );
+-                } );
++        for ($i = 0, $c = count((array) $permissions); $i < $c; $i++) {
++            $permission = explode('.', (array) $permissions[$i], 2);
++            if (count($permission) === 2) {
++                $query->orWhere(function ($query) use ($permission) {
++                    $query->where('name', $permission[1])
++                          ->where('group', $permission[0]);
++                });
+             } else {
+-                $query->orWhere( 'name', (array) $permissions[$i] );
++                $query->orWhere('name', (array) $permissions[$i]);
+             }
+         }
+ 
+-        return ( $query->count() > 0 );
++        return ($query->count() > 0);
+     }
+ }
+diff --git a/tests/AbstractTestCase.php b/tests/AbstractTestCase.php
+index a30bbfe62398090c19cf5ea2e357f8d5606fbc98..76ad52a641839bab6e3c736b1c8c69a9fc6fd9c8 100644
+--- a/tests/AbstractTestCase.php
++++ b/tests/AbstractTestCase.php
+@@ -1,4 +1,5 @@
+ <?php
++
+ /*
+ * This file is part of Jukumu.
+ *
+@@ -7,6 +8,7 @@
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
++
+ namespace SamBenne\Tests\Jukumu;
+ 
+ use GrahamCampbell\TestBench\AbstractPackageTestCase;
+@@ -25,9 +27,9 @@ abstract class AbstractTestCase extends AbstractPackageTestCase
+      *
+      * @return string[]
+      */
+-    protected function getRequiredServiceProviders( $app )
++    protected function getRequiredServiceProviders($app)
+     {
+-        return [ ];
++        return [];
+     }
+ 
+     /**
+@@ -37,8 +39,8 @@ abstract class AbstractTestCase extends AbstractPackageTestCase
+      *
+      * @return string
+      */
+-    protected function getServiceProviderClass( $app )
++    protected function getServiceProviderClass($app)
+     {
+         return 'SamBenne\Jukumu\Providers\JukumuServiceProvider';
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/tests/JukumuTest.php b/tests/JukumuTest.php
+index 1c2de052ae71c81e8dbc0a77415582b9eea7f4da..7bbd6190eeca00a0d21843fdb0634995bc9b76c6 100644
+--- a/tests/JukumuTest.php
++++ b/tests/JukumuTest.php
+@@ -1,4 +1,5 @@
+ <?php
++
+ /*
+ * This file is part of Jukumu.
+ *
+@@ -7,6 +8,7 @@
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
++
+ namespace SamBenne\Tests\Jukumu;
+ 
+ use GrahamCampbell\TestBench\AbstractTestCase as AbstractTestBenchTestCase;
+@@ -15,6 +17,6 @@ class JukumuTest extends AbstractTestBenchTestCase
+ {
+     public function testAll()
+     {
+-        $this->assertTrue( TRUE );
++        $this->assertTrue(true);
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/tests/ServiceProviderTest.php b/tests/ServiceProviderTest.php
+index c3ec4031744e152d712494b4f4b3f416371ced45..cd2f7d97dc777eeab2a995dea0118ac942c3e63e 100644
+--- a/tests/ServiceProviderTest.php
++++ b/tests/ServiceProviderTest.php
+@@ -1,4 +1,5 @@
+ <?php
++
+ /*
+ * This file is part of Jukumu.
+ *
+@@ -7,6 +8,7 @@
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
++
+ namespace SamBenne\Tests\Jukumu;
+ 
+ use GrahamCampbell\TestBench\Traits\ServiceProviderTestCaseTrait;
+@@ -22,6 +24,6 @@ class ServiceProviderTest extends AbstractTestCase
+ 
+     public function testJukumuIsInjectable()
+     {
+-        $this->assertIsInjectable( 'SamBenne\Jukumu\Jukumu' );
++        $this->assertIsInjectable('SamBenne\Jukumu\Jukumu');
+     }
+-}
+\ No newline at end of file
++}

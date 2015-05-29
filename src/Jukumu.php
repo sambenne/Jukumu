@@ -15,13 +15,12 @@ use SamBenne\Jukumu\Models\Permission;
 use SamBenne\Jukumu\Models\Role;
 
 /**
- * Class Jukumu
- * @package SamBenne\Jukumu\Jukumu
+ * Class Jukumu.
  */
 class Jukumu
 {
     /**
-     * Create Role
+     * Create Role.
      *
      * @param string      $name
      * @param string|null $display_name
@@ -30,15 +29,15 @@ class Jukumu
      *
      * @return Role
      */
-    public static function createRole( $name, $display_name = NULL, $description = NULL, $order = 0 )
+    public static function createRole($name, $display_name = null, $description = null, $order = 0)
     {
-        $role = Role::create( compact( 'name', 'display_name', 'description', 'order' ) );
+        $role = Role::create(compact('name', 'display_name', 'description', 'order'));
 
         return $role;
     }
 
     /**
-     * Create Permission
+     * Create Permission.
      *
      * @param string      $name
      * @param string|null $group
@@ -47,59 +46,66 @@ class Jukumu
      *
      * @return Permission
      */
-    public static function createPermission( $name, $group = NULL, $display_name = NULL, $description = NULL )
+    public static function createPermission($name, $group = null, $display_name = null, $description = null)
     {
-        $permission = Permission::create( compact( 'name', 'group', 'display_name', 'description' ) );
+        $permission = Permission::create(compact('name', 'group', 'display_name', 'description'));
 
         return $permission;
     }
 
     /**
-     * Attach Role and Permissions
+     * Attach Role and Permissions.
      *
      * @param mixed $user
      * @param Role  $role
      * @param array $permissions
      */
-    public static function attachRole( $user, Role $role, array $permissions = [ ] )
+    public static function attachRole($user, Role $role, array $permissions = [])
     {
-        $user->setRole( $role->id );
+        $user->setRole($role->id);
 
-        self::attachPermissions( $role, $permissions );
+        self::attachPermissions($role, $permissions);
     }
 
     /**
-     * Attach Permissions
+     * Attach Permissions.
      *
      * @param Role  $role
      * @param array $permissions
      */
-    public static function attachPermissions( Role $role, array $permissions = [ ] )
+    public static function attachPermissions(Role $role, array $permissions = [])
     {
-        if ( ! empty( $permissions )) {
-            for ($i = 0, $c = count( $permissions ); $i < $c; $i ++) {
-                $permissionData = self::getPermission( $permissions[$i] );
-                $permission     = Permission::where( 'name', $permissionData->permission );
+        if (!empty($permissions)) {
+            for ($i = 0, $c = count($permissions); $i < $c; $i++) {
+                $permissionData = self::getPermission($permissions[$i]);
+                $permission = Permission::where('name', $permissionData->permission);
 
                 if ($permissionData->group !== '') {
-                    $permission->where( 'group', $permissionData->group );
+                    $permission->where('group', $permissionData->group);
                 }
 
                 $permission = $permission->first();
 
                 $role->permissions()
-                     ->attach( $permission->id );
+                     ->attach($permission->id);
             }
         }
     }
 
-    public static function getPermission( $permission )
+    /**
+     * Get Permission.
+     *
+     * @param string $permission
+     *
+     * @return object
+     */
+    public static function getPermission($permission)
     {
-        $permission = explode( '.', $permission, 2 );
+        $permission = explode('.', $permission, 2);
 
         return (object) [
-            'permission' => ( isset( $permission[1] ) ? $permission[1] : $permission[0] ),
-            'group'      => ( isset( $permission[1] ) ? $permission[0] : '' )
+            'permission' => (isset($permission[1]) ? $permission[1] : $permission[0]),
+            'group'      => (isset($permission[1]) ? $permission[0] : ''),
         ];
     }
 }
